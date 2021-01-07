@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收件箱</title>
+    <link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../css/demo/demo.css">
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+    <script>
+        var statu=0;
+
+        $(function () {
+            $('#dg').datagrid({
+                url:'../message/findSendMessageByCondition1',
+                columns:[[
+                    {field:'mid',title:'标题',width:100,checkbox:true},
+                    {field:'mtitle',title:'标题',width:100},
+                    {field:'mdateStr',title:'发送时间',width:100},
+                    {field:'mstatu',title:'发送状态',width:100,
+                        formatter:function(value,row,index){
+                            if (value==0){
+                                return "已发送"
+                            } else {
+                                return "未发送"
+                            }
+
+                        }
+
+                    },
+
+                    {field:'sender',title:'发件人',width:100,align:'right'},
+                    {field:'mtype',title:'消息类型',width:100,align:'right'},
+
+                    {field:'operate',title:'操作',width:100,align:'right',
+                        formatter: function(value,row,index){
+                        console.log("操作"+index);
+                        console.log("--------------")
+                            return " <a id="+index+" href=# onclick=showDetailMessage("+row.mid+")> 详情</a>"
+                        }
+                    },
+                    {field:'remark1',title:'阅读状态',width:100,align:'right',
+                        formatter: function(value,row,index){
+                            if (value==null){
+                                return "未读";
+                            } else {
+                                return "已读"
+                            }
+                        }
+                    },
+
+
+                ]],
+                pagination:true,
+                pageNumber:1,
+                pageSize:5,
+                pageList:[1,3,5,7],
+                toolbar: '#tb'
+            });
+
+        });
+
+        //根据条件重新加载表格数据
+        function reloadFunction() {
+            $('#dg').datagrid('load',{
+                sender: $('#sender').val()
+
+            });
+        }
+
+        //获取消息详情
+        function showDetailMessage(mid) {
+
+            statu=1;
+            $.post("../message/findMessageDetail?mid="+mid,function (msg) {
+                if(msg){
+                    window.location.href="inboxDetail.html";
+                }
+            })
+
+        }
+
+
+    </script>
+
+
+</head>
+<body>
+<div id="tb">
+    发件人:<input id="sender" type="text">
+
+    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="reloadFunction()">搜索</a>
+
+
+</div>
+
+
+<table id="dg"></table>
+
+
+
+</body>
+</html>

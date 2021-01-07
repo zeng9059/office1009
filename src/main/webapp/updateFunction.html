@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改功能权限</title>
+    <link rel="stylesheet" type="text/css" href="css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="css/demo/demo.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script>
+        function submitForm(){
+            $('#ff').form('submit', {
+                url:"function/updateFunction",
+
+                success:function(data){
+                    var obj=eval("("+data+")")
+
+                    alert(obj.message)
+
+
+                    if(obj.success){
+                        window.location.href="functionlist.html"
+                    }else {
+                        window.location.reload()
+                    }
+
+                }
+            });
+
+
+        }
+        function clearForm(){
+            $('#ff').form('clear');
+        }
+        $(function () {
+
+            $.ajax({
+
+                type:"post",
+                url:"function/findUpdateFunction",
+                success:function (msg) {
+                    $('#fid').val(msg.fid);
+
+
+                    $('#fcode').textbox('setValue',msg.fcode);
+                    $('#fname').textbox('setValue',msg.fname);
+                    $('#furl').textbox('setValue',msg.furl);
+                    if(msg.parentId==0){
+                        $('#cc1').combobox('select','1');
+                    }else {
+                        $('#cc1').combobox('select','2');
+                        $('#firstFunction').removeAttr('style');
+                        $('#cc2').combobox('select',msg.parentId);
+                    }
+
+
+                }
+            });
+
+        });
+    </script>
+
+</head>
+<body>
+
+<div style="margin:20px 0;"></div>
+
+<div style="padding:10px 60px 20px 60px">
+    <form id="ff" method="post">
+
+<!--        添加属性fid-->
+        <input id="fid" type="hidden" name="fid">
+
+        <table cellpadding="8" >
+            <tr>
+                <td>功能编码:</td>
+                <td><input id="fcode" class="easyui-textbox" type="text" name="fcode" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>功能名称:</td>
+                <td><input id="fname" class="easyui-textbox" type="text" name="fname" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>功能链接:</td>
+                <td><input id="furl" class="easyui-textbox" type="text" name="furl" data-options="required:true"></input></td>
+            </tr>
+            <tr >
+                <td>功能级别:</td>
+                <td>
+
+                    <input id="cc1" class="easyui-combobox" name="flevel" data-options="
+                            valueField:'value',
+                            textField: 'label',
+                            data: [{
+                                label: '一级功能',
+                                value: '1'
+                            },{
+                                label: '二级功能',
+                                value: '2'
+                            }],
+                            onSelect: function(rec){
+                                if(rec.value==2){
+                                    $('#firstFunction').removeAttr('style')
+                                    var url = 'function/getFirstFunctions';
+                                    $('#cc2').combobox('reload', url);
+                                }else{
+                                    $('#firstFunction').attr('style','display: none');
+
+                                }
+
+                                }">
+                    <div style="display: none" id="firstFunction">
+                        <input id="cc2" name="parentId" class="easyui-combobox" data-options="valueField:'fid',textField:'fname'">
+                    </div>
+                </td>
+
+
+        </table>
+    </form>
+    <div style="text-align:center;padding:5px">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">修改</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">取消</a>
+    </div>
+
+</div>
+
+</body>
+</html>

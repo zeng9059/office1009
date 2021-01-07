@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>新增员工</title>
+    <link rel="stylesheet" type="text/css" href="css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="css/demo/demo.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+</head>
+<body>
+
+<div style="margin:20px 0;"></div>
+
+<div style="padding:10px 60px 20px 60px">
+    <form id="ff" method="post">
+        <table cellpadding="8" >
+            <tr>
+                <td>员工姓名:</td>
+                <td><input class="easyui-textbox" type="text" name="ename" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>员工性别:</td>
+                <td>
+                    男：<input type="radio" name="esex" value="0">
+                    女：<input type="radio" name="esex" value="1">
+                </td>
+            </tr>
+            <tr>
+                <td>员工年龄:</td>
+                <td><input class="easyui-textbox" type="text" name="eage" data-options="required:true"></input></td>
+            </tr>
+
+            <tr>
+                <td>联系电话:</td>
+                <td><input class="easyui-textbox" type="text" name="phone" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>入职日期:</td>
+                <td><input id="dd" type="text" name="hireDate" class="easyui-datebox" required="required"></input></td>
+            </tr>
+
+            <tr>
+                <td>工号:</td>
+                <td><input class="easyui-textbox" type="text" name="jobNumber" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>初始密码:</td>
+                <td><input class="easyui-textbox" type="text" name="password" data-options="required:true"></input></td>
+            </tr>
+            <tr >
+                <td>员工角色:</td>
+                <td>
+                    <input id="cc1"   class="easyui-combobox" name="rids" data-options="
+                        valueField:'rid',
+                        textField:'rname',
+                        url:'role/getAllRoles',
+                        multiple:'true'
+
+                    ">
+                </td>
+
+
+        </table>
+    </form>
+    <div style="text-align:center;padding:5px">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">新增</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">取消</a>
+    </div>
+
+</div>
+<script>
+    function submitForm(){
+        $('#ff').form('submit', {
+            url:"employee/addEmployee",
+
+            success:function(data){
+                var obj=eval("("+data+")")
+
+                alert(obj.message)
+
+
+                if(obj.success){
+                    window.location.href="employeelist.html"
+                }else {
+                    window.location.reload()
+                }
+
+            }
+        });
+
+
+    }
+    function clearForm(){
+        $('#ff').form('clear');
+    }
+</script>
+</body>
+</html>

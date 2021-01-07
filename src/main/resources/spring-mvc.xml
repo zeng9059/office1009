@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+
+
+https://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop
+https://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/mvc
+https://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/context
+https://www.springframework.org/schema/context/spring-context.xsd">
+<!--    扫描包-->
+    <context:component-scan base-package="com.offcn.controller">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+<!--    处理器映射器和处理器适配器-->
+<!--    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>-->
+    <mvc:annotation-driven></mvc:annotation-driven>
+<!--    默认静态资源处理器-->
+    <mvc:default-servlet-handler></mvc:default-servlet-handler>
+
+
+<!--    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
+<!--        <property name="converters">-->
+<!--            <set><bean class="com.offcn.util.MyDataConverter"></bean> </set>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+<!--    <mvc:interceptors>-->
+    <!--        <mvc:interceptor>-->
+    <!--            <mvc:mapping path="/**"/>-->
+    <!--            <mvc:exclude-mapping path=""/>-->
+    <!--            <mvc:exclude-mapping path=""/>-->
+    <!--            <mvc:exclude-mapping path=""/>-->
+    <!--            <mvc:exclude-mapping path=""/>-->
+    <!--            <mvc:exclude-mapping path=""//./.';>-->
+    <!--            <bean class="com.offcn.controller.LoginIntercepter">-->
+    <!--            </bean>-->
+
+    <!--        </mvc:interceptor>-->
+    <!--    </mvc:interceptors>-->
+
+
+</beans>
+    

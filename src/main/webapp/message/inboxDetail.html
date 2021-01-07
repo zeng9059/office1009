@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改功能权限</title>
+    <link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../css/demo/demo.css">
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+    <script>
+
+        $(function () {
+
+            $.ajax({
+
+                type:"post",
+                url:"../message/outboxDetail",
+                success:function (msg) {
+                    $('#mid').val(msg.mid);
+
+
+                    $('#mtitle').textbox('setValue',msg.mtitle);
+                    $('#mdate').textbox('setValue',msg.mdate);
+                    $('#sender').textbox('setValue',msg.sender);
+                    $('#message').text(msg.message);
+                    $('#download').text(msg.annex);
+
+
+                }
+            });
+
+        });
+
+    </script>
+
+</head>
+<body>
+
+<div style="margin:20px 0;"></div>
+
+<div style="padding:10px 60px 20px 60px">
+    <form id="ff" method="post">
+
+        <!--        添加属性mid-->
+        <input id="mid" type="hidden" name="mid">
+
+        <table cellpadding="8" >
+            <tr>
+                <td>消息标题:</td>
+                <td><input readonly="readonly" id="mtitle" class="easyui-textbox" type="text" name="mtitle" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>发送日期:</td>
+                <td><input readonly="readonly" id="mdate" class="easyui-textbox" type="text" name="mdate" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>发件人:</td>
+                <td><input readonly="readonly" id="sender" class="easyui-textbox" type="text" name="sender" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>消息详情:</td>
+                <td><textarea id="message" name="message" cols="40" rows="10"></textarea></td>
+            </tr>
+            <tr >
+                <td>下载附件:</td>
+                <td>
+                    <a id="download" href="../message/downAnnex"></a>
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+
+</body>
+</html>

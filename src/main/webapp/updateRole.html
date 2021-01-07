@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>角色详情</title>
+    <link rel="stylesheet" type="text/css" href="css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="css/demo/demo.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script>
+
+        $(function () {
+
+
+
+            $.ajax({
+                type:"post",
+                url:"role/getRoleFunctions",
+                success:function (msg) {
+
+                    $('#rid').val(msg.rid);
+
+
+                    $('#rcode').textbox('setValue',msg.rcode);
+                    $('#rname').textbox('setValue',msg.rname);
+
+                    $('#tt').tree({
+                        url:"role/roleFunctions",
+
+                        checkbox:true,
+
+                    });
+
+                }
+            });
+
+        });
+
+        function submitForm(){
+            var nodes = $('#tt').tree('getChecked', ['checked','indeterminate']);
+            var fids="";
+            for(var i=0;i<nodes.length;i++){
+                fids+=nodes[i].id+",";
+            }
+
+            $('#ff').form('submit', {
+
+                url:"role/updateRole?fids="+fids,
+
+                success:function(data){
+                    var obj=eval("("+data+")")
+
+                    alert(obj.message)
+
+
+                    if(obj.success){
+                        window.location.href="rolelist.html"
+                    }else {
+                        window.location.reload()
+                    }
+
+                }
+            });
+
+
+        }
+        function clearForm(){
+            $('#ff').form('clear');
+        }
+    </script>
+
+</head>
+<body>
+
+<div style="margin:20px 0;"></div>
+
+<div style="padding:10px 60px 20px 60px">
+    <form id="ff" method="post">
+
+        <!--        添加属性rid-->
+        <input id="rid" type="hidden" name="rid">
+
+        <table cellpadding="8" >
+            <tr>
+                <td>角色编码:</td>
+                <td><input  id="rcode" class="easyui-textbox" type="text" name="rcode" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>角色名称:</td>
+                <td><input  id="rname" class="easyui-textbox" type="text" name="rname" data-options="required:true"></input></td>
+            </tr>
+
+            <tr >
+                <td>拥有功能:</td>
+                <td>
+                    <ul id="tt"></ul>
+                </td>
+
+
+        </table>
+        <div style="text-align:center;padding:5px">
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">修改</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">取消</a>
+        </div>
+    </form>
+
+</div>
+
+
+
+</body>
+</html>

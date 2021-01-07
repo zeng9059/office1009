@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+https://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/aop 
+https://www.springframework.org/schema/aop/spring-aop.xsd 
+http://www.springframework.org/schema/context 
+https://www.springframework.org/schema/context/spring-context.xsd">
+    <!--    shiro过滤器-->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!--        shiro核心管理器-->
+        <property name="securityManager" ref="securityManager"/>
+        <!--        未认证跳转页面-->
+        <property name="loginUrl" value="/index.html"></property>
+        <!--        指定未授权页面-->
+        <property name="unauthorizedUrl" value="/index.html"></property>
+        <property name="filterChainDefinitions">
+            <value>
+                <!--                /admin/** = authc, roles[admin]-->
+                <!--                /docs/** = authc, perms[document:read]-->
+
+<!--                此处表示只有rcode角色编码为000的用户才有资格访问该页面-->
+<!--                /functionlist.html=authc,roles[000]-->
+<!--登录且具有功能编码为006才能访问该界面，判断当前用户的功能列表是否包含006功能代码-->
+                /employee/logout=logout
+                /functionlist.html=authc,perms[006]
+                /index.html=anon
+                /employee/login=anon
+                /employee/shiroLogin=anon
+                /img/**=anon
+                /js/**=anon
+                /css/**=anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+<!--    配置session过期时间-->
+    <bean id="defaultWebSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="3000000"></property>
+    </bean>
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="sessionManager" ref="defaultWebSessionManager"></property>
+        <property name="realm" ref="myRealm"></property>
+    </bean>
+    <!--    用于管理shiro过滤器的生命周期-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <!--    自定义realm对象，实现认证授权-->
+    <bean id="myRealm" class="com.offcn.realm.EmployeeRealm">
+
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+<!--                指定校验时使用的算法名称-->
+                <property name="hashAlgorithmName" value="MD5"></property>
+<!--                指定校验时迭代次数-->
+                <property name="hashIterations" value="3"></property>
+
+            </bean>
+        </property>
+    </bean>
+</beans>

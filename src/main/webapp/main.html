@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>管理系统</title>
+    <link rel="stylesheet" type="text/css" href="css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="css/demo/demo.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script>
+
+
+
+
+        $(function() {
+            //
+            // setTimeout(test,60000);
+            // function test(){
+            //     alert("会话即将结束")
+            // }
+
+            // $.post("schedule/timeout",function (msg) {},"json");
+
+
+
+            $('#tt').tree({
+                url:"function/getCurrentFunctions",
+                onClick:function(node){
+
+                   $("#functionUrl").attr('src',node.url);
+                }
+
+            });
+
+            //获取当前用户信息
+            $.ajax({
+
+                type:'post',
+                url:'employee/getCurentEmployee',
+                success:function (msg) {
+
+                    $('#username').text(msg.ename)
+                }
+            });
+
+        });
+
+        function quite(){
+
+            if(confirm("确定要退出么？")){
+                $.ajax({
+
+                    type:'post',
+                    url:'employee/quite',
+                    success:function (msg) {
+                        if (msg){
+                            window.parent.location.href='index.html';
+                        }
+                    }
+                });
+
+            }
+
+        }
+
+
+        function goto() {
+            $("#pa").attr("Style","display:inline-block;");
+        }
+
+
+        function updatePassword() {
+            var password1=$("#password1").val();
+            var password2=$("#password2").val();
+            if ($("#message").text()==null || $("#message").text()==""){
+                $.post("employee/updatePassword",{"password1":password1,"password2":password2},function (msg) {
+                    alert(msg.message)
+                    if (msg.success){
+                        window.location.href="employee/logout"
+                    }else {
+                        window.location.reload();
+                    }
+                },"json")
+            }
+        }
+
+        function isPassword() {
+            var password1=$("#password2").val();
+            var password2=$("#password3").val();
+            if (password1!=password2){
+                $("#message").text("两次输入密码不一致");
+            }else {
+                $("#message").text("");
+            }
+        }
+
+
+    </script>
+</head>
+<body>
+
+<div style="margin:20px 0;"></div>
+<div class="easyui-layout" style="width:1000px;height:500px;">
+    <div data-options="region:'north'" style="height:50px"></div>
+    <div data-options="region:'south',split:true" style="height:50px;"></div>
+    <div data-options="region:'east',split:true" title="当前用户" style="width:120px;">
+        <span id="username"></span><br>
+
+        <a href="javascript:quite()">退出</a><br>
+
+        <a href="javascript:goto()">修改密码</a><br>
+
+        <div id="pa" style="display: none">
+            原密码：<input id="password1" type="password" name="password1">
+            新密码：<input id="password2" type="password" name="password2">
+            确认密码：<input id="password3" type="password" name="password3" onblur="isPassword()">
+
+            <div style="display: block">
+                <span id="message" style="color: red"></span>
+            </div>
+
+            <input id="updatePassword" type="button" value="确认修改" onclick="updatePassword()"><br>
+        </div>
+
+    </div>
+
+
+    <div data-options="region:'west',split:true" title="功能主菜单" style="width:130px;">
+        <ul id="tt"></ul>
+    </div>
+    <div data-options="region:'center',title:'功能主页面',iconCls:'icon-ok'">
+<!--       <img src="img/desk.jpg" width="50%">-->
+        <iframe id="functionUrl" src="default.html" width="100%" height="100%"></iframe>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>新增角色页面</title>
+    <link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="../css/demo/demo.css">
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+</head>
+<body>
+
+<div style="margin:20px 0;"></div>
+
+<div style="padding:10px 60px 20px 60px">
+    <form id="ff" method="post" enctype="multipart/form-data">
+        <table cellpadding="8" >
+            <tr>
+                <td>标题:</td>
+                <td><input class="easyui-textbox" type="text" name="mtitle" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>消息:</td>
+                <td>
+                    <textarea name="message" cols="40" rows="10"></textarea>
+                </td>
+            </tr>
+
+            <tr >
+                <td>收件人</td>
+                <td>
+
+                    <input id="cc1"   class="easyui-combobox" name="reciver" data-options="
+                            valueField:'ename',
+                            textField:'ename',
+                            url:'../employee/findAllEmployee',
+                            multiple:'true'">
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>文件上传：</td>
+                <td>
+                    <input id="imgInput" name="mfile" type="file" style="width:300px" value="点击选择" onchange="showimg1(this)">
+                </td>
+            </tr>
+
+            <tr>
+                <td>预览图片:</td>
+                <td>
+                    <img id="img1" src="" height="50%">
+                </td>
+            </tr>
+
+        </table>
+    </form>
+    <div style="text-align:center;padding:5px;">
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">提交</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">取消</a>
+    </div>
+
+</div>
+<script>
+
+
+    function showimg1(obj){
+        var file=obj.files[0];
+        $("#img1").attr("src",URL.createObjectURL(file));
+    }
+
+
+
+    function submitForm(){
+        $('#ff').form('submit', {
+            url:"../message/addMessage",
+
+            success:function(data){
+                var obj=eval("("+data+")")
+
+                alert(obj.message)
+
+
+                if(obj.success){
+                    window.location.href="outbox.html"
+                }else {
+                    window.location.reload()
+                }
+
+            }
+        });
+
+
+    }
+    function clearForm(){
+        $('#ff').form('clear');
+    }
+</script>
+</body>
+</html>

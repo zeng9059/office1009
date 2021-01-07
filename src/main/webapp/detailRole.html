@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>角色详情</title>
+    <link rel="stylesheet" type="text/css" href="css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="css/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="css/demo/demo.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+    <script>
+
+        $(function () {
+
+            $.ajax({
+                type:"post",
+                url:"role/getRoleFunctions",
+                success:function (msg) {
+
+                    $('#rid').val(msg.rid);
+
+
+                    $('#rcode').textbox('setValue',msg.rcode);
+                    $('#rname').textbox('setValue',msg.rname);
+
+                    $('#tt').tree({
+                        url:"role/roleFunctions",
+
+                        checkbox:true,
+                        onBeforeCheck:function () {
+                            return false;
+                        }
+
+                    });
+
+                }
+            });
+
+        });
+
+    </script>
+
+</head>
+<body>
+
+<div style="margin:20px 0;"></div>
+
+<div style="padding:10px 60px 20px 60px">
+    <form id="ff" method="post">
+
+        <!--        添加属性rid-->
+        <input id="rid" type="hidden" name="rid">
+
+        <table cellpadding="8" >
+            <tr>
+                <td>角色编码:</td>
+                <td><input  readonly="readonly" id="rcode" class="easyui-textbox" type="text" name="rcode" data-options="required:true"></input></td>
+            </tr>
+            <tr>
+                <td>角色名称:</td>
+                <td><input  readonly="readonly" id="rname" class="easyui-textbox" type="text" name="rname" data-options="required:true"></input></td>
+            </tr>
+
+            <tr >
+                <td>拥有功能:</td>
+                <td>
+                    <ul id="tt"></ul>
+                </td>
+
+
+        </table>
+
+    </form>
+
+</div>
+
+
+
+</body>
+</html>
