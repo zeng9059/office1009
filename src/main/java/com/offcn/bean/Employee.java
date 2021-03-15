@@ -6,6 +6,10 @@ import com.offcn.util.BasePage;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 这是实体类
+ */
+
 public class Employee extends BasePage {
 
     private List<Role> roleList;
